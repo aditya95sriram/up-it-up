@@ -1,9 +1,11 @@
 var sz = 200, pad = 10;
 var state, empty;
+var labels = {numbers: false, letters: true};
+
 function setup() {
   createCanvas(3*sz+4*pad,3*sz+4*pad);
   state = [[2,2,2],[2,0,2],[2,2,2]];
-  label = [[1,2,3],[4,5,6],[7,8,9]];
+  ids = [[1,2,3],[4,5,6],[7,8,9]];
   empty = [1,1];
   textSize(50);
   textAlign(CENTER,CENTER);
@@ -36,7 +38,8 @@ function draw_board() {
 
         // text
         fill(51);
-        text(label[y][x] + " udlrfb"[st], left, top, sz, sz);
+        text((labels.numbers ? ids[y][x] : "") +
+             (labels.letters ? " udlrfb"[st] : ""), left, top, sz, sz);
       }
       left += sz + pad;
     }
@@ -45,11 +48,11 @@ function draw_board() {
 }
 
 function move(x,y,nx,ny) {
-  label[ny][nx] = label[y][x];
+  ids[ny][nx] = ids[y][x];
   state[y][x] = 0;
-  label[y][x] = 5;
+  ids[y][x] = 5;
   empty = [x, y];
-  console.log(empty, state, label);
+  // console.log(empty, state, ids);
 }
 
 function move_right(x, y) {
@@ -85,5 +88,11 @@ function keyPressed() {
   else if (keyCode == LEFT_ARROW && x<2) // left
     move_left(x+1,y);
   else
-    console.log("invalid");
+    console.log("invalids");
 }
+
+$('document').ready(function() {
+  $('.labels').change(function() {
+    labels[$(this).data('key')] = this.checked;
+  });
+});
