@@ -36,7 +36,7 @@ function draw_board() {
 
         // text
         fill(51);
-        text(" udlrfb"[st], left, top, sz, sz);
+        text(label[y][x] + " udlrfb"[st], left, top, sz, sz);
       }
       left += sz + pad;
     }
@@ -45,7 +45,7 @@ function draw_board() {
 }
 
 function move(x,y,nx,ny) {
-  label[y][x] = label[ny][nx];
+  label[ny][nx] = label[y][x];
   state[y][x] = 0;
   label[y][x] = 5;
   empty = [x, y];
