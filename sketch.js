@@ -1,9 +1,18 @@
 var sz = 200, pad = 10;
 var state, empty;
-var labels = {numbers: false, letters: true};
+var labels = {numbers: false, letters: false};
+var canvas;
+
+function windowResized() {
+  canvas.position((windowWidth - width)/2);
+}
 
 function setup() {
-  createCanvas(3*sz+4*pad,3*sz+4*pad);
+  sz = parseInt(windowHeight*0.25);
+  pad = parseInt(sz/20);
+  canvas = createCanvas(3*sz+4*pad,3*sz+4*pad);
+  windowResized();
+  canvas.parent('sketch');
   state = [[2,2,2],[2,0,2],[2,2,2]];
   ids = [[1,2,3],[4,5,6],[7,8,9]];
   empty = [1,1];
@@ -11,6 +20,7 @@ function setup() {
   textAlign(CENTER,CENTER);
   textFont("Verdana");
 }
+
 
 function draw_board() {
   var top = pad;
@@ -92,7 +102,13 @@ function keyPressed() {
 }
 
 $('document').ready(function() {
-  $('.labels').change(function() {
-    labels[$(this).data('key')] = this.checked;
+  // initialize settings
+  for (var k in labels) {
+    $('[data-key=' + k + ']').data('checked', labels[k]);
+  }
+  $('.labels').click(function() {
+    $(this).data('checked', !$(this).data('checked'));
+    labels[$(this).data('key')] = $(this).data('checked');
   });
+  $('[data-key=letters]').click();
 });
