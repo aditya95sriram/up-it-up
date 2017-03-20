@@ -18,25 +18,38 @@ function preload() {
 function setup() {
   sz = parseInt(windowHeight*0.12);
   pad = parseInt(sz/20);
-  canvas = createCanvas(windowHeight*0.75,windowHeight*0.75);
+  canvas = createCanvas(windowHeight*0.75,windowHeight*0.75,WEBGL);
   windowResized();
   canvas.parent('sketch');
   state = [[2,2,2],[2,0,2],[2,2,2]];
   ids = [[1,2,3],[4,5,6],[7,8,9]];
   empty = [1,1];
-  textSize(50);
-  textAlign(CENTER,CENTER);
-  textFont("Verdana");
-  angleMode(DEGREES);
+
+  background(51);
+  push();
+  stroke(255);
+  strokeWeight(3);
+
+  // draw_board();
+  // draw_iso_cube(0,0);
+  //translate(width/2,width/2,0);
+  //draw_iso_face();
+  // box(20,20,20);
+  pop();
+
 }
+
+function draw() {draw_iso_face();}
 
 function draw_iso_face() {
   push();
+  fill(255);
+  rotateZ(radians(90));
   beginShape();
-  vertex(0,0);
-  vertex(sz*cos(30),-sz*sin(30));
-  vertex(sz*cos(30),sz-sz*sin(30));
-  vertex(0,sz);
+  vertex(0,0,0);
+  vertex(sz*cos(30),-sz*sin(30),0);
+  vertex(sz*cos(30),sz-sz*sin(30),0);
+  vertex(0,sz,0);
   endShape(CLOSE);
   pop();
 }
@@ -91,15 +104,16 @@ function draw_board() {
   }
 }
 
-function draw() {
+function drwe() {
   background(51);
   push();
   noFill();
   stroke(255);
   strokeWeight(3);
 
-   draw_board();
-  draw_iso_cube(0,0);
+  // draw_board();
+  // draw_iso_cube(0,0);
+  draw_iso_face();
   pop();
 }
 
