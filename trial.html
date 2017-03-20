@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Up It Up</title>
+    </style>
+    <!-- <link rel="stylesheet" href="libraries/uikit.min.css" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/css/uikit.min.css" />
+    <!-- <script language="javascript" type="text/javascript" src="libraries/jquery.min.js"></script> -->
+    <!-- <script language="javascript" type="text/javascript" src="libraries/uikit.min.js"></script> -->
+    <!-- <script language="javascript" type="text/javascript" src="libraries/uikit-icons.min.js"></script> -->
+    <!-- <script language="javascript" type="text/javascript" src="libraries/p5.js"></script> -->
+    <!-- <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script> -->
+    <style type="text/css">
+      body {
+        text-align: center;
+      }
+      #panel {
+        display: inline-block;
+        float: left;
+        margin-left: 30px;
+        width: 20%;
+        text-align: left;
+      }
+      .uk-accordion-title span {
+        margin-right: 10px;
+      }
+    </style>
+</head>
+
+<body>
+
+  <h1>Up It Up</h1>
+  <div id="panel">
+    <ul uk-accordion="multiple: true">
+      <li class="uk-open" id="info">
+        <h3 class="uk-accordion-title"><span uk-icon="icon: info; ratio: 2"></span>Instructions</h3>
+        <div class="uk-accordion-content" width="30%">
+          <ul>
+            <li>Use arrow keys
+              <span uk-icon="icon: arrow-left"></span><span uk-icon="icon: arrow-right"></span>
+              <span uk-icon="icon: arrow-up"></span><span uk-icon="icon: arrow-down"></span>
+              to move a cube into a void</li>
+            <li>Numbers are used to identify/distinguish between the cubes</li>
+            <li>Letters indicate the orientation of the cube</li>
+          </ul>
+        </div>
+      </li>
+      <li class="uk-open" id="settings">
+        <h3 class="uk-accordion-title"><span uk-icon="icon: settings; ratio: 2"></span>Settings</h3>
+        <div class="uk-accordion-content">
+          <button class="uk-button uk-button-large uk-button-default labels" data-key="letters"
+                  uk-toggle="target: [data-key=letters]; cls: uk-button-primary">Letters</button>
+          <button class="uk-button uk-button-large uk-button-default labels" data-key="numbers"
+                  uk-toggle="target: [data-key=numbers]; cls: uk-button-primary">Numbers</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="sketch">
+    <!-- canvas drawn here -->
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/js/uikit.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/js/uikit-icons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/addons/p5.dom.js"></script>
+  <script language="javascript" type="text/javascript" src="trial_sketch.js"></script>
+
+</body>
+</html>
