@@ -16,28 +16,21 @@ function preload() {
 function setup() {
   sz = parseInt(windowHeight*0.12);
   pad = parseInt(sz/20);
-  canvas = createCanvas(windowHeight*0.75,windowHeight*0.75);
+  canvas = createCanvas(windowHeight*0.75,windowHeight*0.75,WEBGL);
   windowResized();
   canvas.parent('sketch');
 }
 
-function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
-}
-
 function draw(){
-  background(255);
-  box();
+  background(51);
+  //orbitControl();
+  rotateZ(0.9);
+  beginShape();
+  texture(images.dot_circle);
+  fill(175);
+  vertex(20,20,0);
+  vertex(20,-20,0);
+  vertex(-20,-20,0);
+  vertex(-20,20,0);
+  face = endShape(CLOSE);
 }
-
-$('document').ready(function() {
-  // initialize settings
-  for (var k in labels) {
-    $('[data-key=' + k + ']').data('checked', labels[k]);
-  }
-  $('.labels').click(function() {
-    $(this).data('checked', !$(this).data('checked'));
-    labels[$(this).data('key')] = $(this).data('checked');
-  });
-  $('[data-key=letters]').click();
-});
