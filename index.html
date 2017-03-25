@@ -25,6 +25,13 @@
       .uk-accordion-title span {
         margin-right: 10px;
       }
+      .uk-active {
+        font-weight: 700;
+        background-color: #e4e4e4;
+      }
+      .uk-dropdown-nav>li {
+        padding: 2px 10px;
+      }
     </style>
 </head>
 
@@ -49,10 +56,32 @@
       <li class="uk-open" id="settings">
         <h3 class="uk-accordion-title"><span uk-icon="icon: settings; ratio: 2"></span>Settings</h3>
         <div class="uk-accordion-content">
-          <button class="uk-button uk-button-large uk-button-default labels" data-key="letters"
-                  uk-toggle="target: [data-key=letters]; cls: uk-button-primary">Letters</button>
-          <button class="uk-button uk-button-large uk-button-default labels" data-key="numbers"
-                  uk-toggle="target: [data-key=numbers]; cls: uk-button-primary">Numbers</button>
+          <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-1-2">
+              <button class="uk-button uk-button-large uk-button-default labels" data-key="letters"
+              uk-toggle="target: [data-key=letters]; cls: uk-button-primary">Letters</button>
+            </div>
+            <div class="uk-width-1-2">
+              <button class="uk-button uk-button-large uk-button-default labels" data-key="numbers"
+              uk-toggle="target: [data-key=numbers]; cls: uk-button-primary">Numbers</button>
+            </div>
+            <div class="uk-width-1-1">
+              <button class="uk-button uk-button-default uk-button-large uk-width-1-1" type="button">Size: <span id="order-val">3</span></button>
+              <div uk-dropdown="pos: top-justify; animation: uk-animation-slide-bottom-small; offset: -5;" class="uk-padding-small">
+                <ul class="uk-nav uk-dropdown-nav" id="order" style="">
+                  <li class="uk-active"><a href="#">3</a></li>
+                  <li class=""><a href="#">4</a></li>
+                  <li class=""><a href="#">5</a></li>
+                  <li class=""><a href="#">6</a></li>
+                  <li class=""><a href="#">7</a></li>
+                  <li class=""><a href="#">8</a></li>
+                  <li class=""><a href="#">9</a></li>
+                  <li class=""><a href="#">10</a></li>
+                </ul>
+              </div>
+            </div>
+            <!-- <input id="order" type="range" min="3" max="10" step="1" value="3"></input> -->
+          </div>
         </div>
       </li>
     </ul>
@@ -67,6 +96,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/addons/p5.dom.js"></script>
   <script language="javascript" type="text/javascript" src="sketch.js"></script>
-
+  <script language="javascript" type="text/javascript" src="ui.js"></script>
 </body>
 </html>
