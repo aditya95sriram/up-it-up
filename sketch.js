@@ -2,14 +2,22 @@ var sz = 200, pad = 10, order = 3;
 var boardWidth, boardHeight;
 var state, empty, emptyid;
 var labels = {numbers: false, letters: false};
+var move_history, redo_history;
 var canvas;
+var Moves = {comp: {u: 'd', d: 'u', l: 'r', r: 'l'}};
+
+Array.prototype.last = function() {return this[this.length-1];};
 
 function windowResized() {
   canvas.position((windowWidth - width)/2);
 }
 
 function setup() {
-  boardSize = parseInt(windowHeight*0.75);
+  Moves.code2move = {[UP_ARROW]: "u",[DOWN_ARROW]: "d",
+                     [LEFT_ARROW]: "l",[RIGHT_ARROW]: "r"};
+  Moves.move2code = {u: UP_ARROW, d: DOWN_ARROW,
+                    l: LEFT_ARROW, r: RIGHT_ARROW};
+  boardSize = parseInt(min(windowHeight*0.75,windowWidth*0.5));
   canvas = createCanvas(boardSize,boardSize);
   windowResized();
   canvas.parent('sketch');
@@ -20,6 +28,7 @@ function setup() {
 }
 
 function init() {
+  move_history = [], redo_history = [];
   sz = boardSize*20/(21*order+1);
   pad = sz/20;
   var row1 = [], row2 = [];
@@ -77,7 +86,7 @@ function draw_board() {
   }
 }
 
-function move(x,y,nx,ny) {
+function make_move(x,y,nx,ny) {
   ids[ny][nx] = ids[y][x];
   state[y][x] = 0;
   ids[y][x] = emptyid;
@@ -87,19 +96,19 @@ function move(x,y,nx,ny) {
 
 function move_right(x, y) {
   state[y][x+1] = [0, 4, 3, 1, 2, 5, 6][state[y][x]];
-  move(x,y,x+1,y);
+  make_move(x,y,x+1,y);
 }
 function move_left(x, y) {
   state[y][x-1] = [0, 3, 4, 2, 1, 5, 6][state[y][x]];
-  move(x,y,x-1,y);
+  make_move(x,y,x-1,y);
 }
 function move_up(x, y) {
   state[y-1][x] = [0, 6, 5, 3, 4, 1, 2][state[y][x]];
-  move(x,y,x,y-1);
+  make_move(x,y,x,y-1);
 }
 function move_down(x, y) {
   state[y+1][x] = [0, 5, 6, 3, 4, 2, 1][state[y][x]];
-  move(x,y,x,y+1);
+  make_move(x,y,x,y+1);
 }
 
 function draw() {
@@ -107,16 +116,58 @@ function draw() {
   draw_board();
 }
 
-function keyPressed() {
+Moves.record = function(code) {
+  var move = this.code2move[code];
+  var prev = move_history.pop();
+  if (prev != this.comp[move]) { // push only if no cancelation
+    if (prev) move_history.push(prev);
+    move_history.push(move);
+    if (move == redo_history.last())
+      redo_history.pop();
+    else
+      redo_history = [];
+  }
+}
+
+Moves.undo = function() {
+  var last = move_history.last();
+  if (last) {
+    redo_history.push(last);
+    var code = this.move2code[this.comp[last]];
+    key_handler(code);
+  }
+}
+
+Moves.redo = function() {
+  var move = redo_history.last();
+  if (move)
+    key_handler(this.move2code[move]);
+}
+
+function key_handler(code, k) {
   var x = empty[0], y = empty[1];
-  if (keyCode == UP_ARROW && y<(order-1)) // up
+  var valid = true;
+  if (code == UP_ARROW && y<(order-1)) // up
     move_up(x,y+1);
-  else if (keyCode == DOWN_ARROW && y>0) // down
+  else if (code == DOWN_ARROW && y>0) // down
     move_down(x,y-1);
-  else if (keyCode == RIGHT_ARROW && x>0) // right
+  else if (code == RIGHT_ARROW && x>0) // right
     move_right(x-1,y);
-  else if (keyCode == LEFT_ARROW && x<(order-1)) // left
+  else if (code == LEFT_ARROW && x<(order-1)) // left
     move_left(x+1,y);
-  else
-    console.log("invalids");
+  else {
+    console.log("invalid move", k, code);
+    valid = false;
+  }
+  if (valid) Moves.record(code);
+
+  if (k == "Z")
+    Moves.undo();
+  else if (k == "X")
+    Moves.redo();
+  console.log(move_history, redo_history);
+}
+
+function keyPressed() {
+  key_handler(keyCode, key);
 }

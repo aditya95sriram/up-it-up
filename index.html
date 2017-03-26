@@ -15,12 +15,17 @@
       body {
         text-align: center;
       }
-      #panel {
+      .panel {
         display: inline-block;
-        float: left;
-        margin-left: 30px;
+        margin: 20px;
         width: 20%;
         text-align: left;
+      }
+      #left-panel {
+        float: left;
+      }
+      #right-panel {
+        float: right;
       }
       .uk-accordion-title span {
         margin-right: 10px;
@@ -38,16 +43,17 @@
 <body>
 
   <h1>Up It Up</h1>
-  <div id="panel">
+  <div id="left-panel" class="panel">
     <ul uk-accordion="multiple: true">
       <li class="uk-open" id="info">
         <h3 class="uk-accordion-title"><span uk-icon="icon: info; ratio: 2"></span>Instructions</h3>
-        <div class="uk-accordion-content" width="30%">
-          <ul>
+        <div class="uk-accordion-content">
+          <ul class="uk-list uk-list-striped">
             <li>Use arrow keys
               <span uk-icon="icon: arrow-left"></span><span uk-icon="icon: arrow-right"></span>
               <span uk-icon="icon: arrow-up"></span><span uk-icon="icon: arrow-down"></span>
               to move a cube into a void</li>
+            <li>Hoteys: <kbd>Z</kbd> &ndash; Undo &nbsp;&nbsp;&nbsp; <kbd>X</kbd> &ndash; Redo
             <li>Numbers are used to identify/distinguish between the cubes</li>
             <li>Letters indicate the orientation of the cube</li>
           </ul>
@@ -82,6 +88,29 @@
             </div>
             <!-- <input id="order" type="range" min="3" max="10" step="1" value="3"></input> -->
           </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="right-panel" class="panel">
+    <ul uk-accordion="multiple: true">
+      <li class="uk-open" id="info">
+        <h3 class="uk-accordion-title"><span uk-icon="icon: bolt; ratio: 2"></span>What's New</h3>
+        <div class="uk-accordion-content">
+          <ul class="uk-list uk-list-striped">
+            <li><span class="uk-text-meta">26th March</span><br>
+                <span class="uk-text-lead">Move history</span><br>
+                Undo and Redo
+            <li><span class="uk-text-meta">25th March</span><br>
+                <span class="uk-text-lead">Order of puzzle</span><br>
+                Change the size of the puzzle
+            <li><span class="uk-text-meta">19th March</span><br>
+                <span class="uk-text-lead">Improved UI</span><br>
+                Cleaned interface and added instructions
+            <li><span class="uk-text-meta">18th March</span><br>
+                <span class="uk-text-lead">Setting: Numbers</span><br>
+                Option to label cubes to track them better
+          </ul>
         </div>
       </li>
     </ul>
