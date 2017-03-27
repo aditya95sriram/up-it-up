@@ -1,5 +1,5 @@
 var sz = 200, pad = 10, order = 3;
-var boardWidth, boardHeight;
+var boardSize;
 var state, empty, emptyid;
 var labels = {numbers: false, letters: false};
 var move_history, redo_history;
@@ -7,6 +7,7 @@ var canvas;
 var Moves = {comp: {u: 'd', d: 'u', l: 'r', r: 'l'}};
 
 Array.prototype.last = function() {return this[this.length-1];};
+boardSize = parseInt(Math.min(window.innerHeight*0.75,window.innerWidth*0.5));
 
 function windowResized() {
   canvas.position((windowWidth - width)/2);
@@ -17,7 +18,6 @@ function setup() {
                      [LEFT_ARROW]: "l",[RIGHT_ARROW]: "r"};
   Moves.move2code = {u: UP_ARROW, d: DOWN_ARROW,
                     l: LEFT_ARROW, r: RIGHT_ARROW};
-  boardSize = parseInt(min(windowHeight*0.75,windowWidth*0.5));
   canvas = createCanvas(boardSize,boardSize);
   windowResized();
   canvas.parent('sketch');
@@ -144,6 +144,10 @@ Moves.redo = function() {
     key_handler(this.move2code[move]);
 }
 
+Moves.display = function() {
+  $(this.ticker).text(move_history.join("").toUpperCase() || "Your moves will show up here");
+}
+
 function key_handler(code, k) {
   var x = empty[0], y = empty[1];
   var valid = true;
@@ -170,4 +174,5 @@ function key_handler(code, k) {
 
 function keyPressed() {
   key_handler(keyCode, key);
+  Moves.display();
 }

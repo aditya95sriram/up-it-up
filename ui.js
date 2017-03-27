@@ -8,11 +8,6 @@ $('document').ready(function() {
     labels[$(this).data('key')] = $(this).data('checked');
   });
   $('[data-key=letters]').click();
-  /*$('#order>li').click(function() {
-    order = this.value;
-    console.log(order);
-    init();
-  })*/
 
   $('#order>li').click(function() {
     $('.uk-active').removeClass('uk-active');
@@ -23,4 +18,9 @@ $('document').ready(function() {
     console.log("order changed to " + v);
     init();
   });
+
+  Moves.ticker = $('#ticker');
+
+  $('.change-log').css("max-height",0.9*boardSize-$('#right-panel h3').height());
+  $('.change-log').css("min-height",0.9*boardSize-$('#right-panel h3').height());
 });
