@@ -21,6 +21,8 @@ $('document').ready(function() {
 
   Moves.ticker = $('#ticker');
 
-  $('.change-log').css("max-height",0.9*boardSize-$('#right-panel h3').height());
-  $('.change-log').css("min-height",0.9*boardSize-$('#right-panel h3').height());
+  $('#right-panel').css("max-height",boardSize);
+  $('#right-panel').css("max-height",boardSize);
+  $('#left-panel').css("max-height",boardSize);
+  $('#left-panel').css("min-height",boardSize);
 });
