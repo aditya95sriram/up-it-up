@@ -29,19 +29,30 @@ void setup() {
   empty[0] = 1;
   empty[1] = 1;
   
-  dot_circle   = loadImage("http://localhost:8000/shiffman/up-it-up/images/dot-circle.jpg");
-  empty_circle = loadImage("http://localhost:8000/shiffman/up-it-up/images/empty-circle.jpg");
-  arrow     = loadImage("http://localhost:8000/shiffman/up-it-up/images/up-arrow.jpg");
+  dot_circle   = loadImage("http://localhost:8000/shiffman/up-it-up/images/circle-dot.jpg");
+  empty_circle = loadImage("http://localhost:8000/shiffman/up-it-up/images/circle-empty.jpg");
+  arrow     = loadImage("http://localhost:8000/shiffman/up-it-up/images/arrow-up.jpg");
 }
 
-void draw_iso_face() {
+void draw_iso_face(String s) {
+  PImage tex;
+  switch (s) {
+    case "dot":
+      tex = dot_circle;
+      break;
+    case "empty":
+      tex = empty_circle;
+      break;
+    case "arrow":
+      tex = arrow;
+      break;
+  }
   float theta = radians(30);
   pushMatrix();
   textureMode(NORMAL);
   noStroke();
   beginShape();
-  //fill(255);
-  texture(empty_circle);
+  texture(tex);
   vertex(            0,               0,0,0);
   vertex(sz*cos(theta),  -sz*sin(theta),0,1);
   vertex(sz*cos(theta),sz-sz*sin(theta),1,1);
@@ -49,26 +60,34 @@ void draw_iso_face() {
   endShape(CLOSE);
   popMatrix();
 }
-/*
-function find_corner(i, j) {
-  var x = width/2 + sz/2 + i*sz, y = j*sz, theta = 30;
-  var nx = x*cos(theta) - y*cos(theta),
-  ny = x*sin(theta) + y*sin(theta);
-  return {x: nx, y: ny};
+
+PVector find_corner(int i, int j) {
+  float x = width/2 + sz/2 + i*sz, y = j*sz, theta = 30;
+  float nx = x*cos(theta) - y*cos(theta),
+        ny = x*sin(theta) + y*sin(theta);
+  return new PVector(nx, ny);
 }
 
-function draw_iso_cube(i, j) {
-  var corner = find_corner(i, j);
-  push();
+void draw_iso_cube(int i, int j) {
+  PVector corner = find_corner(i, j);
+  pushMatrix();
   translate(corner.x, corner.y);
+  int st = state[j][i];
+  PImage
+  switch (st) {
+    case 0:
+      return;
+    case 1:
+      
+  }
   draw_iso_face();
   rotate(120);
   draw_iso_face();
   rotate(120);
   draw_iso_face();
-  pop();
+  popMatrix();
 }
-
+/*
 function draw_board() {
   for (var j=0; j<3; j++) {
     for (var i=0; i<3; i++) {
@@ -84,7 +103,7 @@ void draw() {
   stroke(255);
   strokeWeight(3);
   translate(50,50);
-  draw_iso_face();
+  draw_iso_face(empty_circle);
    //draw_board();
   //draw_iso_cube(0,0);
   popMatrix();
