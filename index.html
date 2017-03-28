@@ -16,15 +16,33 @@
       body {
         text-align: center;
       }
-      #panel {
-        display: inline-block;
-        float: left;
-        margin-left: 30px;
-        width: 20%;
+      .panel {
         text-align: left;
       }
       .uk-accordion-title span {
         margin-right: 10px;
+      }
+      .uk-active {
+        font-weight: 700;
+        background-color: #e4e4e4;
+      }
+      .uk-dropdown-nav>li {
+        padding: 2px 10px;
+      }
+      .change-log {
+        overflow-y: overlay;
+      }
+      .change-title {
+        display: inline-block;
+        float: left;
+        margin-top: -10px;
+      }
+      .change-date {
+        display: inline-block;
+        float: right;
+      }
+      .clear {
+        clear: both;
       }
     </style>
 </head>
@@ -32,37 +50,120 @@
 <body>
 
   <h1>Up It Up</h1>
-  <div id="panel">
-    <ul uk-accordion="multiple: true">
-      <li class="uk-open" id="info">
-        <h3 class="uk-accordion-title"><span uk-icon="icon: info; ratio: 2"></span>Instructions</h3>
-        <div class="uk-accordion-content" width="30%">
-          <ul>
-            <li>Use arrow keys
-              <span uk-icon="icon: arrow-left"></span><span uk-icon="icon: arrow-right"></span>
-              <span uk-icon="icon: arrow-up"></span><span uk-icon="icon: arrow-down"></span>
-              to move a cube into a void</li>
-            <li>Numbers are used to identify/distinguish between the cubes</li>
-            <li>Letters indicate the orientation of the cube</li>
-          </ul>
-        </div>
-      </li>
-      <li class="uk-open" id="settings">
-        <h3 class="uk-accordion-title"><span uk-icon="icon: settings; ratio: 2"></span>Settings</h3>
-        <div class="uk-accordion-content">
-          <button class="uk-button uk-button-large uk-button-default labels" data-key="letters"
-                  uk-toggle="target: [data-key=letters]; cls: uk-button-primary">Letters</button>
-          <button class="uk-button uk-button-large uk-button-default labels" data-key="numbers"
-                  uk-toggle="target: [data-key=numbers]; cls: uk-button-primary">Numbers</button>
-        </div>
-      </li>
-    </ul>
+  <div uk-grid class="uk-grid-small">
+    <div id="left-panel" class="panel uk-width-1-4 uk-margin-small-left">
+      <ul uk-accordion="multiple: true">
+        <li class="uk-open" id="info">
+          <h3 class="uk-accordion-title"><span uk-icon="icon: info; ratio: 2"></span>Instructions</h3>
+          <div class="uk-accordion-content">
+            <ul class="uk-list uk-list-striped">
+              <li>Use arrow keys
+                <span uk-icon="icon: arrow-left"></span><span uk-icon="icon: arrow-right"></span>
+                <span uk-icon="icon: arrow-up"></span><span uk-icon="icon: arrow-down"></span>
+                to move a cube into a void</li>
+              <li>Hotkeys: <kbd>Z</kbd> &ndash; Undo &nbsp;&nbsp;&nbsp; <kbd>X</kbd> &ndash; Redo
+              <li>Numbers are used to identify/distinguish between the cubes</li>
+              <li>Letters indicate the orientation of the cube</li>
+            </ul>
+          </div>
+        </li>
+        <li class="uk-open" id="settings">
+          <h3 class="uk-accordion-title"><span uk-icon="icon: settings; ratio: 2"></span>Settings</h3>
+          <div class="uk-accordion-content">
+            <div class="uk-grid-small" uk-grid>
+              <div class="uk-width-1-2 uk-child-width-1-1">
+                <button class="uk-button uk-button-large uk-button-default labels" data-key="letters"
+                uk-toggle="target: [data-key=letters]; cls: uk-button-primary">Letters</button>
+              </div>
+              <div class="uk-width-1-2 uk-child-width-1-1">
+                <button class="uk-button uk-button-large uk-button-default labels" data-key="numbers"
+                uk-toggle="target: [data-key=numbers]; cls: uk-button-primary">Numbers</button>
+              </div>
+              <div class="uk-width-1-1">
+                <button class="uk-button uk-button-default uk-button-large uk-width-1-1" type="button">Size: <span id="order-val">3</span></button>
+                <div uk-dropdown="pos: top-justify; animation: uk-animation-slide-bottom-small; offset: -5;" class="uk-padding-small">
+                  <ul class="uk-nav uk-dropdown-nav" id="order" style="">
+                    <li class="uk-active"><a href="#">3</a></li>
+                    <li class=""><a href="#">4</a></li>
+                    <li class=""><a href="#">5</a></li>
+                    <li class=""><a href="#">6</a></li>
+                    <li class=""><a href="#">7</a></li>
+                    <li class=""><a href="#">8</a></li>
+                    <li class=""><a href="#">9</a></li>
+                    <li class=""><a href="#">10</a></li>
+                  </ul>
+                </div>
+              </div>
+              <!-- <input id="order" type="range" min="3" max="10" step="1" value="3"></input> -->
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div id="sketch" class="uk-width-expand uk-child-width-expand">
+      <canvas data-processing-sources="sketch.pde">
+        <!-- canvas drawn here -->
+      </canvas>
+    </div>
+    <div id="right-panel" class="panel uk-width-1-4 uk-margin-small-right">
+      <ul uk-accordion="multiple: true">
+        <li class="uk-open" id="change-log">
+          <h3 class="uk-accordion-title"><span uk-icon="icon: bolt; ratio: 2"></span>What's New</h3>
+          <div class="uk-accordion-content">
+            <ul class="uk-list uk-list-striped change-log">
+              <li>
+                <a href="#">
+                  <span class="uk-text-meta uk-margin-small-right change-date">27th March</span>
+                </a>
+                <span class="uk-text-lead change-title">Move history</span><br>
+                <div class="clear"></div>
+                <span class="uk-text-muted">Display moves at bottom</span>
+              <li>
+                <a href="http://htmlpreview.github.io/?https://github.com/aditya95sriram/up-it-up/blob/c75fdb4c6a79bb9f2f32d00d4256eaf1776daa16/index.html">
+                  <span class="uk-text-meta uk-margin-small-right change-date">26th March</span>
+                </a>
+                <span class="uk-text-lead change-title">Move history</span><br>
+                <div class="clear"></div>
+                <span class="uk-text-muted">Undo and Redo</span>
+              <li>
+                <a href="http://htmlpreview.github.io/?https://github.com/aditya95sriram/up-it-up/blob/9fdd538463ce5115c17b7db5f20915390f1d8ea0/index.html">
+                  <span class="uk-text-meta uk-margin-small-right change-date">25th March</span>
+                </a>
+                <span class="uk-text-lead change-title">Order of puzzle</span><br>
+                <div class="clear"></div>
+                <span class="uk-text-muted">Change the size of the puzzle</span>
+              <li>
+                <a href="http://htmlpreview.github.io/?https://github.com/aditya95sriram/up-it-up/blob/948d7889a2cdea88b0c7372f416c52faf2408a45/index.html">
+                  <span class="uk-text-meta uk-margin-small-right change-date">19th March</span>
+                </a>
+                <span class="uk-text-lead change-title">Improved UI</span>
+                <div class="clear"></div>
+                <span class="uk-text-muted">Cleaned interface and added instructions</span>
+              <li>
+                <a href="http://htmlpreview.github.io/?https://github.com/aditya95sriram/up-it-up/blob/3eb1912f06c5501c5eb3a2feca6921098f4050ae/index.html">
+                  <span class="uk-text-meta uk-margin-small-right change-date">18th March</span>
+                </a>
+                <span class="uk-text-lead change-title">Setting: Numbers</span><br>
+                <div class="clear"></div>
+                <span class="uk-text-muted">Option to label cubes to track them better</span>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
-  <p id="msg"></p>
-  <canvas data-processing-sources="sketch.pde"></canvas>
+  <!-- <div style="clear: both;"></div> -->
+  <div uk-grid class="uk-margin-remove-top uk-grid-small">
+    <div class="uk-width-1-4"></div>
+    <div uk-alert class="uk-width-1-2 uk-text-break" id="ticker">Your moves will show up here</div>
+    <div class="uk-width-1-4"></div>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/js/uikit.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/js/uikit-icons.min.js"></script>
   <script language="javascript" type="text/javascript" src="sketch.js"></script>
+  <script language="javascript" type="text/javascript" src="ui.js"></script>
+  <a href="https://github.com/aditya95sriram/up-it-up"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 </body>
 </html>
