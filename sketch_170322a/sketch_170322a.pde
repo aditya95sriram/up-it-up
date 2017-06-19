@@ -1,13 +1,19 @@
-/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/dot-circle.jpg"; */
-/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/empty-circle.jpg"; */
-/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/up-arrow.jpg"; */
+/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/circle-dot.jpg"; */
+/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/circle-empty.jpg"; */
+/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/arrow-up.jpg"; */
+/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/arrow-down.jpg"; */
+/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/arrow-right.jpg"; */
+/* @pjs preload="http://localhost:8000/shiffman/up-it-up/images/arrow-left.jpg"; */
+import java.util.*;
 
 int sz = 200, pad = 10;
 int[][] state = new int[3][3];
 int[][] ids = new int[3][3];
 int[] empty = new int[2];
 
-PImage dot_circle, empty_circle, arrow;
+PImage dot_circle, empty_circle, arrow_up, arrow_down, arrow_left, arrow_right;
+HashMap<String, PImage> texmap;
+
 /*
 function windowResized() {
   canvas.position((windowWidth - width)/2);
@@ -28,41 +34,36 @@ void setup() {
   ids = tmp2;   
   empty[0] = 1;
   empty[1] = 1;
+  System.out.println("hello");
+  texmap = new HashMap<String,PImage>();
+  texmap.put("dot"         , loadImage("http://localhost:8000/shiffman/up-it-up/images/circle-dot.jpg"));
+  texmap.put("empty"       , loadImage("http://localhost:8000/shiffman/up-it-up/images/circle-empty.jpg"));
+  texmap.put("arrow-up"    , loadImage("http://localhost:8000/shiffman/up-it-up/images/arrow-up.jpg"));
+  texmap.put("arrow-down"  , loadImage("http://localhost:8000/shiffman/up-it-up/images/arrow-down.jpg"));
+  texmap.put("arrow-left"  , loadImage("http://localhost:8000/shiffman/up-it-up/images/arrow-left.jpg"));
+  texmap.put("arrow-right" , loadImage("http://localhost:8000/shiffman/up-it-up/images/arrow-right.jpg"));
   
-  dot_circle   = loadImage("http://localhost:8000/shiffman/up-it-up/images/circle-dot.jpg");
-  empty_circle = loadImage("http://localhost:8000/shiffman/up-it-up/images/circle-empty.jpg");
-  arrow     = loadImage("http://localhost:8000/shiffman/up-it-up/images/arrow-up.jpg");
+  System.out.println("hello");
 }
 
 void draw_iso_face(String s) {
   PImage tex;
-  switch (s) {
-    case "dot":
-      tex = dot_circle;
-      break;
-    case "empty":
-      tex = empty_circle;
-      break;
-    case "arrow":
-      tex = arrow;
-      break;
-  }
+  tex = texmap.containsKey(s) ? texmap.get(s) : texmap.get("dot");
   float theta = radians(30);
-  pushMatrix();
+  stroke(220);
   textureMode(NORMAL);
-  noStroke();
+  fill(255);
   beginShape();
   texture(tex);
   vertex(            0,               0,0,0);
-  vertex(sz*cos(theta),  -sz*sin(theta),0,1);
+  vertex(sz*cos(theta),  -sz*sin(theta),1,0);
   vertex(sz*cos(theta),sz-sz*sin(theta),1,1);
-  vertex(            0,              sz,1,0);
+  vertex(            0,              sz,0,1);
   endShape(CLOSE);
-  popMatrix();
 }
 
 PVector find_corner(int i, int j) {
-  float x = width/2 + sz/2 + i*sz, y = j*sz, theta = 30;
+  float x = width/2 + sz/2 + i*sz, y = j*sz, theta = radians(30);
   float nx = x*cos(theta) - y*cos(theta),
         ny = x*sin(theta) + y*sin(theta);
   return new PVector(nx, ny);
@@ -70,43 +71,75 @@ PVector find_corner(int i, int j) {
 
 void draw_iso_cube(int i, int j) {
   PVector corner = find_corner(i, j);
-  pushMatrix();
-  translate(corner.x, corner.y);
+  translate(corner.x, corner.y, i*3+j);
   int st = state[j][i];
-  PImage
+  String rface, lface, uface;
   switch (st) {
     case 0:
+      translate(-corner.x, -corner.y, -i*3-j);
       return;
-    case 1:
-      
+    case 1: // top
+      rface = "arrow-up";
+      lface = "arrow-left";
+      uface = "dot";
+      break;
+    case 2: // bottom
+      rface = "arrow-down";
+      lface = "arrow-right";
+      uface = "empty";
+      break;
+    case 3: // left
+      rface = "empty";
+      lface = "arrow-down"; 
+      uface = "arrow-right";
+      break;
+    case 4: // right
+      rface = "dot";
+      lface = "arrow-up";
+      uface = "arrow-left";
+      break;
+    case 5: // front
+      rface = "arrow-left";
+      lface = "dot";
+      uface = "arrow-up";
+      break;
+    case 6: // back
+      rface = "arrow-right"; 
+      lface = "empty";
+      uface = "arrow-down";
+      break;
+    default:
+      rface = uface = lface = "empty";
   }
-  draw_iso_face();
-  rotate(120);
-  draw_iso_face();
-  rotate(120);
-  draw_iso_face();
-  popMatrix();
+  draw_iso_face(rface);
+  rotate(radians(120));
+  draw_iso_face(lface);
+  rotate(radians(120));
+  draw_iso_face(uface);
+  rotate(radians(-240));
+  translate(-corner.x, -corner.y, -i*3-j);
 }
-/*
-function draw_board() {
-  for (var j=0; j<3; j++) {
-    for (var i=0; i<3; i++) {
-      draw_iso_cube(i, j);
+
+void draw_board() {
+  for (int j=0; j<3; j++) {
+    for (int i=0; i<3; i++) {
+      draw_iso_cube(j, i);
     }
   }
 }
-*/
+
 void draw() {
+  if (mousePressed) {
+    lights();
+  }
   background(51);
-  pushMatrix();
   noFill();
   stroke(255);
   strokeWeight(3);
-  translate(50,50);
-  draw_iso_face(empty_circle);
-   //draw_board();
-  //draw_iso_cube(0,0);
-  popMatrix();
+  //translate(50,50);
+  //draw_iso_face("empty");
+  draw_board();
+  
 }
 /*
 
