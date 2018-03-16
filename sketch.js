@@ -4,7 +4,16 @@ var state, empty, emptyid;
 var labels = {numbers: false, letters: false};
 var move_history, redo_history;
 var canvas;
+var mode = 0; // mode 0: cube, mode 1: tiles
 var Moves = {comp: {u: 'd', d: 'u', l: 'r', r: 'l'}};
+var move_transition = [{'right': [0, 4, 3, 1, 2, 5, 6],
+                        'left' : [0, 3, 4, 2, 1, 5, 6],
+                        'up'   : [0, 6, 5, 3, 4, 1, 2],
+                        'down' : [0, 5, 6, 3, 4, 2, 1] },
+                        {'right': [0, 2, 1],
+                         'left' : [0, 2, 1],
+                         'up'   : [0, 2, 1],
+                         'down' : [0, 2, 1] }];
 
 Array.prototype.last = function() {return this[this.length-1];};
 boardSize = parseInt(Math.min(window.innerHeight*0.75,window.innerWidth*0.5));
@@ -29,6 +38,7 @@ function setup() {
 
 function init() {
   move_history = [], redo_history = [];
+  Moves.display();
   sz = boardSize*20/(21*order+1);
   pad = sz/20;
   var row1 = [], row2 = [];
@@ -95,19 +105,23 @@ function make_move(x,y,nx,ny) {
 }
 
 function move_right(x, y) {
-  state[y][x+1] = [0, 4, 3, 1, 2, 5, 6][state[y][x]];
+  state[y][x+1] = move_transition[mode].right[state[y][x]];
+  // state[y][x+1] = [0, 4, 3, 1, 2, 5, 6][state[y][x]];
   make_move(x,y,x+1,y);
 }
 function move_left(x, y) {
-  state[y][x-1] = [0, 3, 4, 2, 1, 5, 6][state[y][x]];
+  state[y][x-1] = move_transition[mode].left[state[y][x]];
+  // state[y][x-1] = [0, 3, 4, 2, 1, 5, 6][state[y][x]];
   make_move(x,y,x-1,y);
 }
 function move_up(x, y) {
-  state[y-1][x] = [0, 6, 5, 3, 4, 1, 2][state[y][x]];
+  state[y-1][x] = move_transition[mode].up[state[y][x]];
+  // state[y-1][x] = [0, 6, 5, 3, 4, 1, 2][state[y][x]];
   make_move(x,y,x,y-1);
 }
 function move_down(x, y) {
-  state[y+1][x] = [0, 5, 6, 3, 4, 2, 1][state[y][x]];
+  state[y+1][x] = move_transition[mode].down[state[y][x]];
+  // state[y+1][x] = [0, 5, 6, 3, 4, 2, 1][state[y][x]];
   make_move(x,y,x,y+1);
 }
 
@@ -127,14 +141,14 @@ Moves.record = function(code) {
     else
       redo_history = [];
   }
+  Moves.display();
 }
 
 Moves.undo = function() {
   var last = move_history.last();
   if (last) {
     redo_history.push(last);
-    var code = this.move2code[this.comp[last]];
-    key_handler(code);
+    key_handler(this.move2code[this.comp[last]]);
   }
 }
 
@@ -169,10 +183,23 @@ function key_handler(code, k) {
     Moves.undo();
   else if (k == "X")
     Moves.redo();
-  console.log(move_history, redo_history);
+  else if (k == "R")
+    init();
+  else if ((k >= "2" && k <= "9") || k == "0") {
+    order = parseInt(k);
+    if (k == "0") order = 10;
+    $('.uk-active').removeClass('uk-active');
+    $('#order>li:nth-child(' + (order-1) + ')').addClass('  uk-active');
+    $('#order-val').text(order);
+    init();
+  }
+  else if (code == 32) {
+    $('#modetoggle').click();
+  }
+  // console.log(move_history, redo_history);
 }
 
 function keyPressed() {
   key_handler(keyCode, key);
-  Moves.display();
+  // Moves.display();
 }

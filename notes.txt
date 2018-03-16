@@ -1,0 +1,28 @@
+* For TV series where the episodes are being added periodically (once a week/month etc) e.g. "Young Sheldon"; there should be an option to subscribe/follow the series such that whenever a new episode is added, we get a notification (either a push notification on the phone or a browser notification on the pc)
+solution
+  version 1
+    2 - DRU
+    3 - DRU U LL DD
+    4 - DRU U LL DD L UUU RRR
+    5 - DRU U LL DD L UUU RRR U LLLL DDDD
+    6 - DRU U LL DD L UUU RRR U LLLL DDDD L UUUUU RRRRR
+    7 - DRU U LL DD L UUU RRR U LLLL DDDD L UUUUU RRRRR U LLLLLL DDDDDD
+    8 - f(7) L U7 R7
+    9 - f(8) U L8 D8
+    f(2n) = f(2n-1) L U2n-1 R2n-1
+    f(2n+1) = f(2n) U L2n D2n
+
+    g(n) = |f(n)|
+    g(2) = 3
+    g(3) = g(2)+1+2*2 = 8
+    g(4) = g(3)+1+2*3 = 15
+    g(n) = g(n-1)+1+2*(n-1)
+    g(n) = (n-1)^2-1+1+2*(n-1) = (n-1)^2 + 2*(n-1) + 1 - 1= n^2-1
+
+  version 2
+
+    3 - DRUULLDRDLUR (12)
+    5 - RDLLLLUUUURRRRDDLULLDDRRULDR (28)
+    7 - RDLLLLLLUUUUUURRRRRRDDDDLUUULLLLDDDDRUUURRDLDDRRULDR (52)
+    7 - RDLLLLLLUUUUUURDDDDDRUUUUURDDDDDRUUUUURRDLDRDLDDRULD (52)
+    9 - RDLLLLLLLLUUUUUUUURDDDDDDDRUUUUUUURDDDDDDDRUUUUUUURDDDDDDDRUUUUUUURRDLDRDLDRDLDDRULD (84)

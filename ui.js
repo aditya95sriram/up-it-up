@@ -19,6 +19,12 @@ $('document').ready(function() {
     init();
   });
 
+  $('#modetoggle').click(function() {
+    var selmode = $("#modetoggle .selected").text();
+    mode = selmode == "Tile" ? 1 : 0;
+    init();
+  })
+
   Moves.ticker = $('#ticker');
 
   $('#right-panel').css("max-height",boardSize);
